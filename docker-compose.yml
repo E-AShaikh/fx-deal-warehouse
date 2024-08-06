@@ -1,22 +1,22 @@
-version: '3.8'
+#version: '3.8'
 services:
-  app:
-    image: eabushaikh/fx_deal_warehouse:latest
-    build: .
-    restart: always
-    container_name: fx_deal_warehouse
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fx_deals_db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Manifold123
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    networks:
-      - app-network
-    volumes:
-      - app-logs:/var/log/app
+#  app:
+#    image: eabushaikh/fx_deal_warehouse:latest
+#    build: .
+#    restart: always
+#    container_name: fx_deal_warehouse
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fx_deals_db
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: Manifold123
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
+#    networks:
+#      - app-network
+#    volumes:
+#      - app-logs:/var/log/app
 
   db:
     image: mysql:8.0
@@ -27,13 +27,13 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+#    networks:
+#      - app-network
+#
+#networks:
+#  app-network:
+#    driver: bridge
 
 volumes:
   db-data:
-  app-logs:
+#  app-logs:
