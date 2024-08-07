@@ -25,9 +25,9 @@ public interface FxDealRepository extends JpaRepository<FxDeal, String> {
     @ToLog
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "INSERT INTO fx_deal (id, amount, from_currency_iso, timestamp, to_currency_iso) "
+    @Query(value = "INSERT INTO fx_deal (id, amount, from_currency_iso, timestamp, to_currency_iso, deal_type) "
             + "VALUES (:#{#d.getId()}, :#{#d.getAmount()}, :#{#d.getFromCurrencyISO()}, :#{#d.getTimestamp()}," +
-            " :#{#d.getToCurrencyISO()})", nativeQuery = true)
+            " :#{#d.getToCurrencyISO()}," + " :#{#d.getDealType()})" , nativeQuery = true)
     void insert(@Param("d") FxDeal d);
 
 
