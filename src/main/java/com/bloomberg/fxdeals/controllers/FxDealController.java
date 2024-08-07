@@ -3,19 +3,26 @@ package com.bloomberg.fxdeals.controllers;
 import com.bloomberg.fxdeals.aspects.ToLog;
 import com.bloomberg.fxdeals.model.FxDeal;
 import com.bloomberg.fxdeals.services.FxDealService;
+import com.bloomberg.fxdeals.validation.ValidSortField;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/deal")
 public class FxDealController {
-    FxDealService fxDealService;
+    private final FxDealService fxDealService;
 
     public FxDealController(FxDealService fxDealService) {
         this.fxDealService = fxDealService;
@@ -48,10 +55,43 @@ public class FxDealController {
     }
 
     @ToLog
-    @GetMapping
-    public @ResponseBody Iterable<FxDeal> getAllDeals() {
-        return fxDealService.getAllDeals();
+    @GetMapping("/all")
+    public @ResponseBody Page<FxDeal> getAllDeals(@RequestParam(defaultValue = "0") @PositiveOrZero int page,
+                                                  @RequestParam(defaultValue = "10") @PositiveOrZero int size,
+                                                  @RequestParam(defaultValue = "id") @ValidSortField(entityClass = FxDeal.class) String sortedBy) {
+        Page<FxDeal> deals = fxDealService.getAllDeals(page, size, sortedBy);
+        if (deals.getTotalElements() == 0) {
+            log.info("Empty page has been returned");
+        }
+        return deals;
     }
+
+    @ToLog
+    @GetMapping("/amount")
+    public @ResponseBody Page<FxDeal> getDealsByAmount(@RequestParam BigDecimal amount,
+                                                       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+                                                       @RequestParam(defaultValue = "10") @PositiveOrZero int size,
+                                                       @RequestParam(defaultValue = "id") @ValidSortField(entityClass = FxDeal.class) String sortedBy) {
+        Page<FxDeal> deals = fxDealService.getDealsByAmount(amount, page, size, sortedBy);
+        if (deals.getTotalElements() == 0) {
+            log.info("Empty page has been returned");
+        }
+        return deals;
+    }
+
+    @ToLog
+    @GetMapping("/type")
+    public @ResponseBody Page<FxDeal> getDealsByDealType(@RequestParam String dealType,
+                                                       @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+                                                       @RequestParam(defaultValue = "10") @PositiveOrZero int size,
+                                                       @RequestParam(defaultValue = "id") @ValidSortField(entityClass = FxDeal.class) String sortedBy) {
+        Page<FxDeal> deals = fxDealService.getDealsByDealType(dealType, page, size, sortedBy);
+        if (deals.getTotalElements() == 0) {
+            log.info("Empty page has been returned");
+        }
+        return deals;
+    }
+
 }
 
 

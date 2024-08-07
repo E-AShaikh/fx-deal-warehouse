@@ -8,14 +8,14 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MqListener {
+public class FxDealMqListener {
 
-    FxDealService fxDealService;
+    private final FxDealService fxDealService;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
 
-    public MqListener(FxDealService fxDealService, ObjectMapper objectMapper) {
+    public FxDealMqListener(FxDealService fxDealService, ObjectMapper objectMapper) {
         this.fxDealService = fxDealService;
         this.objectMapper = objectMapper;
     }

@@ -4,13 +4,17 @@ import com.bloomberg.fxdeals.aspects.ToLog;
 import com.bloomberg.fxdeals.model.FxDeal;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
+import java.math.BigDecimal;
+import java.util.List;
 
 
 @Repository
@@ -29,6 +33,12 @@ public interface FxDealRepository extends JpaRepository<FxDeal, String> {
             + "VALUES (:#{#d.getId()}, :#{#d.getAmount()}, :#{#d.getFromCurrencyISO()}, :#{#d.getTimestamp()}," +
             " :#{#d.getToCurrencyISO()}," + " :#{#d.getDealType()})" , nativeQuery = true)
     void insert(@Param("d") FxDeal d);
+
+    Page<FxDeal> findAll(Pageable pageable);
+
+    Page<FxDeal> findByAmount(BigDecimal amount, Pageable pageable);
+
+    Page<FxDeal> findByDealType(String dealType, Pageable pageable);
 
 
 }

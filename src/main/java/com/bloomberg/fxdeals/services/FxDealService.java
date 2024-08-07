@@ -5,24 +5,39 @@ import com.bloomberg.fxdeals.aspects.ToLog;
 import com.bloomberg.fxdeals.model.FxDeal;
 import com.bloomberg.fxdeals.repositories.FxDealRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class FxDealService {
-    private FxDealRepository fxDealRepository;
+    private final FxDealRepository fxDealRepository;
 
     public FxDealService(FxDealRepository fxDealRepository) {
         this.fxDealRepository = fxDealRepository;
     }
 
     @ToLog
-    public Iterable<FxDeal> getAllDeals() {
-        return fxDealRepository.findAll();
+    public Page<FxDeal> getAllDeals(int page, int size, String sortedBy) {
+        Pageable sortedPage = PageRequest.of(page, size, Sort.by(sortedBy).descending());
+        return fxDealRepository.findAll(sortedPage);
+    }
+
+    @ToLog
+    public Page<FxDeal> getDealsByAmount(BigDecimal amount, int page, int size, String sortedBy) {
+        Pageable sortedPage = PageRequest.of(page, size, Sort.by(sortedBy));
+        return fxDealRepository.findByAmount(amount, sortedPage);
+    }
+
+    @ToLog
+    public Page<FxDeal> getDealsByDealType(String dealType, int page, int size, String sortedBy) {
+        Pageable sortedPage = PageRequest.of(page, size, Sort.by(sortedBy).descending());
+        return fxDealRepository.findByDealType(dealType, sortedPage);
     }
 
     @ToLog

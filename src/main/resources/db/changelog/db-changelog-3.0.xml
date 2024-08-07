@@ -4,17 +4,10 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="add-deal-type-column" author="e.abushaikh">
-        <addColumn tableName="fx_deal">
-            <column name="deal_type" type="varchar(255)" defaultValue="N/A"/>
-        </addColumn>
-
+    <changeSet id="update-preexisted-rows-with-default-value" author="admin">
         <update tableName="fx_deal">
             <column name="deal_type" value="N/A"/>
             <where>deal_type IS NULL</where>
         </update>
-
-        <addNotNullConstraint tableName="fx_deal" columnName="deal_type" columnDataType="varchar(255)"/>
     </changeSet>
-
 </databaseChangeLog>
